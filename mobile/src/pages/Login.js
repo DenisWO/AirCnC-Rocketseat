@@ -18,7 +18,7 @@ export default function Login({navigation}){
   }, []);
 
   async function handleSubmit(){
-    ToastAndroid.show('Fazendo login!', ToastAndroid.SHORT);
+    //ToastAndroid.show('Fazendo login!', ToastAndroid.SHORT);
     const response = await api.post('/sessions', { email });
     const { _id} = response.data;
 
