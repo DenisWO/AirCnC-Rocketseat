@@ -18,6 +18,9 @@ function SpotList({tech, navigation}){
   function handleNavigate(id){
     navigation.navigate('Book', {id});
   }
+  function handleCancel(){
+    navigation.navigate('Login');
+  }
   return (
     <View style = {styles.container}>
       <Text style = {styles.title}> Empresas que usam <Text style = {styles.bold}> {tech} </Text> </Text>
@@ -29,16 +32,19 @@ function SpotList({tech, navigation}){
         showsHorizontalScrollIndicator = {false}
         renderItem = {({item}) => (
           <View style={styles.listItem}>
-            <Image style={styles.thumbnail} source={{uri: item.thumbnail_url}} />
+            <Image style={styles.thumbnail} source={{uri:'https://facebook.github.io/react/logo-og.png'}}  />
             <Text style={styles.company}>{item.company}</Text>
             <Text style={styles.price}>{item.price ? `R$${item.price}/dia` : `GRATUITO!`}</Text>
             <TouchableOpacity onPress={() => handleNavigate(item.id)} style={styles.button}>
-              <Text style={style.buttonText}> Solicitar reserva </Text>
+              <Text style={styles.buttonText}> Solicitar reserva </Text>
             </TouchableOpacity>
           </View>
 
         ) }
       />
+      <TouchableOpacity onPress={() => handleCancel()} style={styles.cancelButton}>
+        <Text style={styles.buttonText}> Voltar para a pesquia </Text>
+      </TouchableOpacity>
     </View>
   )
 }
@@ -91,6 +97,17 @@ const styles = StyleSheet.create({
     color: '#444',
     fontWeight: 'bold',
     fontSize: 15,
+  },
+  cancelButton: {
+    marginTop: 230,
+    marginBottom: 10,
+    marginRight: 20,
+    marginLeft: 20,
+    height: 32,
+    backgroundColor: '#ccc',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 2,
   },
 });
 
