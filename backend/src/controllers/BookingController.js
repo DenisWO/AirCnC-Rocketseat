@@ -1,19 +1,25 @@
-const Booking = require('../models/Booking');
+const Booking = require('../models/Booking.js')
 
 module.exports = {
-    async store(request, response) {
-        const { user_id } = request.headers;
-        const {spot_id } = request.params;
-        const { date} = request.body;
+    async store(req, res) {
+        const { user_id } = req.headers
+        const { spot_id } = req.params
+        const { date } = req.body
 
         const booking = await Booking.create({
-            user : user_id,
+            user: user_id,
             spot: spot_id,
-            date,
-        });
+            date
+        })
 
-        await booking.populate('spot').populate('user').execPopulate();
+        await booking.populate('spot').populate('user').execPopulate()
 
-        return response.json(booking);
+        const ownerSocket = req.connectedUsers[booking.spot.user]
+
+        if (ownerSocket) {
+            req.io.to(ownerSocket).emit('booking_request', booking)
+        }
+
+        return res.json(booking)
     }
 }

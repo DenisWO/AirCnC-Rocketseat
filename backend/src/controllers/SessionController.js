@@ -1,15 +1,14 @@
-const User = require('../models/User');
-
-//index, show, store, update, destroy
+const User = require('../models/User.js')
 
 module.exports = {
-    async store(request, response) {
-        const {email} = request.body;
-        let user = await User.findOne({email});
-        if (!user){
-            user = await User.create({email});
-        }
-
-        return response.json(user);
+    async store(req,res) {
+        const email = req.body.email
+        const filter = { email }
+        const dataToUpsert = { email }
+        const user = await User.findOneAndUpdate(filter, dataToUpsert, {
+            new: true,
+            upsert: true
+        })
+        return res.json(user)
     }
-}; 
+}

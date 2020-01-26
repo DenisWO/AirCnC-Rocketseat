@@ -1,5 +1,6 @@
 import React, {useState, useEffect } from 'react';
-import { SafeAreaView, ScrollView, Text, AsyncStorage, StyleSheet, Image } from 'react-native';
+import socketio from 'socket.io-client';
+import { SafeAreaView, ScrollView, Text, AsyncStorage, StyleSheet, Image, Alert } from 'react-native';
 
 import SpotList from './../components/SpotList';
 
@@ -13,6 +14,17 @@ export default function List(){
       const techsArray = storageTechs.split(',').map(tech => tech.trim());
       setTechs(techsArray);
     })
+  }, []);
+  useEffect(() => {
+    AsyncStorage.getItem('user').then(user_id => {
+      const socket = socketio('http://10.0.0.139:3333', {
+        query: {user_id}
+      })
+      socket.on('booking_response', booking => {
+        Alert.alert(`Sua reserva em ${booking.spot.company} em ${booking.date} foi ${booking.approved ? 'APROVADA': 'REJEITADA' }`);
+      })
+    })
+
   }, []);
   return (
   <SafeAreaView style = {styles.container}>
